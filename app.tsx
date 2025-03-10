@@ -1,12 +1,12 @@
-import AuthPage from "./auth-page"
+// import AuthPage from "./auth-page"
 
-function App() {
-  return (
-    <div className="App">
-      <AuthPage />
-    </div>
-  )
-}
+// function App() {
+//   return (
+//     <div className="App">
+//       <AuthPage />
+//     </div>
+//   )
+// }
 
-export default App
+// export default App
 
