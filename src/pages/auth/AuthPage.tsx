@@ -1,13 +1,11 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Eye, EyeOff, Upload } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/Card"
-import Button from "../../components/ui/Button"
+import {Button} from "../../components/ui/Button"
 import Input from "../../components/ui/Input"
-import Select from "../../components/ui/Select"
+import {Select} from "../../components/ui/Select"
 import { useAuth } from "../../hooks/useAuth"
 import { UserRole } from "../../types/auth"
 

@@ -3,19 +3,19 @@ import ReactDOM from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
 import "./index.css"
 import App from "./App"
-import { AuthProvider } from "./context/AuthContext"
-import { NotificationProvider } from "./context/NotificationContext"
+// import { AuthProvider } from "./context/AuthContext"
+// import { NotificationProvider } from "./context/NotificationContext"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <NotificationProvider>
+      {/* <AuthProvider> */}
+        {/* <NotificationProvider> */}
           <App />
-        </NotificationProvider>
-      </AuthProvider>
+        {/* </NotificationProvider> */}
+      {/* </AuthProvider> */}
     </BrowserRouter>
   </React.StrictMode>,
 )
