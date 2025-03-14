@@ -62,6 +62,7 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
       const config = getAxiosConfig();
       if (!config.headers) return;
       await axios.put("http://localhost:5000/api/users/reject-lawyer", { lawyerId: userId }, config);
+
       setUsers(users.map((u) => (u._id === userId ? { ...u, status: "Rejected" } : u)));
     } catch (err) {
       console.error("Reject error:", err);
@@ -366,7 +367,7 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         {user.license_file ? (
                           <a
-                            href={`http://localhost:5000${user.license_file}`}
+                            href={`http://localhost:5000/${user.license_file}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 flex items-center"

@@ -51,25 +51,37 @@ const Profile: React.FC<ProfileProps> = ({ adminProfile, setAdminProfile, getAxi
           username: adminProfile.name,
           email: adminProfile.email,
           phone: adminProfile.phone,
+          profile_photo: adminProfile.profileImage,
         };
       }
 
-      console.log("Profile data:", profileData instanceof FormData ? [...profileData.entries()] : profileData);
+      console.log("Profile data sent:", profileData instanceof FormData ? [...profileData.entries()] : profileData);
 
+      let response;
       if (profileData instanceof FormData) {
-        await axios.put("http://localhost:5000/api/users/admin/profile", profileData, {
+        response = await axios.put("http://localhost:5000/api/users/admin/profile", profileData, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
       } else {
-        await axios.put("http://localhost:5000/api/users/admin/profile", profileData, config);
+        response = await axios.put("http://localhost:5000/api/users/admin/profile", profileData, config);
       }
+
+      console.log("Update response:", response.data);
+
+      const updatedProfile = response.data.user;
+      setAdminProfile((prev) => ({
+        ...prev,
+        name: updatedProfile.username || prev.name,
+        email: updatedProfile.email || prev.email,
+        phone: updatedProfile.phone || prev.phone,
+        profileImage: updatedProfile.profile_photo || prev.profileImage,
+      }));
 
       if (adminProfile.newPassword && adminProfile.password) {
         const passwordData = {
           currentPassword: adminProfile.password,
           newPassword: adminProfile.newPassword,
         };
-        console.log("Password data:", passwordData);
         await axios.put("http://localhost:5000/api/users/admin/password", passwordData, config);
       }
 
@@ -77,21 +89,6 @@ const Profile: React.FC<ProfileProps> = ({ adminProfile, setAdminProfile, getAxi
     } catch (err: any) {
       console.error("Profile update error:", err.response?.data || err);
       alert("Failed to update profile: " + (err.response?.data?.message || "Unknown error"));
-    }
-  };
-
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target && event.target.result) {
-          setAdminProfile((prev) => ({
-            ...prev,
-            profileImage: event.target.result as string,
-          }));
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
     }
   };
 
@@ -111,39 +108,7 @@ const Profile: React.FC<ProfileProps> = ({ adminProfile, setAdminProfile, getAxi
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <div className="p-6">
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-500 dark:border-blue-400">
-                <img
-                  src={adminProfile.profileImage}
-                  alt="Admin Profile"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (!target.src.includes("placeholder.svg")) {
-                      target.src = "/placeholder.svg?height=200&width=200";
-                      target.onerror = null;
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <input
-                  type="file"
-                  id="profile-image"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleProfileImageChange}
-                />
-                <button
-                  onClick={() => document.getElementById("profile-image")?.click()}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                >
-                  Change Photo
-                </button>
-              </div>
-            </div>
-
+          <div className="flex flex-col gap-8">
             <div className="flex-1">
               <form onSubmit={handleProfileUpdate} className="space-y-4">
                 <div className="space-y-2">
@@ -159,7 +124,6 @@ const Profile: React.FC<ProfileProps> = ({ adminProfile, setAdminProfile, getAxi
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <label htmlFor="email" className="block text-sm font-medium">
                     Email
@@ -173,7 +137,6 @@ const Profile: React.FC<ProfileProps> = ({ adminProfile, setAdminProfile, getAxi
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <label htmlFor="phone" className="block text-sm font-medium">
                     Phone
@@ -187,52 +150,45 @@ const Profile: React.FC<ProfileProps> = ({ adminProfile, setAdminProfile, getAxi
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
                   />
                 </div>
-
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <h3 className="text-lg font-medium mb-4">Change Password</h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label htmlFor="current-password" className="block text-sm font-medium">
-                        Current Password
-                      </label>
-                      <input
-                        type="password"
-                        id="current-password"
-                        name="password"
-                        value={adminProfile.password}
-                        onChange={handleProfileInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="new-password" className="block text-sm font-medium">
-                        New Password
-                      </label>
-                      <input
-                        type="password"
-                        id="new-password"
-                        name="newPassword"
-                        value={adminProfile.newPassword}
-                        onChange={handleProfileInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="confirm-password" className="block text-sm font-medium">
-                        Confirm New Password
-                      </label>
-                      <input
-                        type="password"
-                        id="confirm-password"
-                        name="confirmPassword"
-                        value={adminProfile.confirmPassword}
-                        onChange={handleProfileInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
-                      />
-                    </div>
-                  </div>
+                <div className="space-y-2">
+                  <label htmlFor="password" className="block text-sm font-medium">
+                    Current Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={adminProfile.password}
+                    onChange={handleProfileInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
+                  />
                 </div>
-
+                <div className="space-y-2">
+                  <label htmlFor="newPassword" className="block text-sm font-medium">
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    id="newPassword"
+                    name="newPassword"
+                    value={adminProfile.newPassword}
+                    onChange={handleProfileInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={adminProfile.confirmPassword}
+                    onChange={handleProfileInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700"
+                  />
+                </div>
                 <div className="flex justify-end pt-4">
                   <button
                     type="submit"

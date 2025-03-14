@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import UsersManagement from "./UsersManagement.tsx";
+import UsersManagement from "./UsersManagement";
 import CasesManagement from "./CasesManagement";
 import Notifications from "./Notifications";
 import AuditLogs from "./AuditLogs";
@@ -14,7 +14,6 @@ import Profile from "./Profile";
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
 
-  // State
   const [activeTab, setActiveTab] = useState<string>("users");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState<boolean>(false);
@@ -47,7 +46,6 @@ const AdminDashboard: React.FC = () => {
     phone: "",
   });
 
-  // Axios config with token
   const getAxiosConfig = () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -55,13 +53,11 @@ const AdminDashboard: React.FC = () => {
       navigate("/login");
       return {};
     }
-    console.log("Token sent in request:", token);
     return {
       headers: { Authorization: `Bearer ${token}` },
     };
   };
 
-  // Fetch initial data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -81,21 +77,15 @@ const AdminDashboard: React.FC = () => {
         const auditRes = await axios.get("http://localhost:5000/api/audit", config);
         setAuditLogs(auditRes.data.logs);
 
-        const token = localStorage.getItem("token");
-        if (token) {
-          try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            setAdminProfile((prev) => ({
-              ...prev,
-              name: payload.username || "Admin",
-              email: payload.email || "",
-              phone: payload.phone || "",
-              profileImage: payload.profile_photo || "/placeholder.svg?height=200&width=200",
-            }));
-          } catch (err) {
-            console.error("Failed to decode token:", err);
-          }
-        }
+        // Fetch the latest admin profile from the server
+        const profileRes = await axios.get("http://localhost:5000/api/users/admin/profile", config);
+        setAdminProfile((prev) => ({
+          ...prev,
+          name: profileRes.data.username || "Admin",
+          email: profileRes.data.email || "",
+          phone: profileRes.data.phone || "",
+          profileImage: profileRes.data.profile_photo || "/placeholder.svg?height=200&width=200",
+        }));
       } catch (err: any) {
         console.error("Fetch error:", err);
         if (err.response?.status === 401) {

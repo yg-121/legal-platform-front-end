@@ -66,11 +66,11 @@ const Header: React.FC<HeaderProps> = ({
                 }}
                 className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
               >
-                Profile
+                {/* Profile */}
               </a>
-              <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+              {/* <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
                 Settings
-              </a>
+              </a> */}
               <a
                 href="#"
                 onClick={handleLogout}
