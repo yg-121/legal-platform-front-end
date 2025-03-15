@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Check, XIcon, Trash2 } from "lucide-react";
 
@@ -31,6 +31,8 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
   setNewAdmin,
   getAxiosConfig,
 }) => {
+  const [selectedLicense, setSelectedLicense] = useState<string | null>(null);
+
   const filteredUsers = users.filter((user) => {
     return statusFilter === "All" || user.status === statusFilter;
   });
@@ -50,13 +52,13 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
     try {
       const config = getAxiosConfig();
       if (!config.headers) return;
+      if (!config.headers) return;
       await axios.put("http://localhost:5000/api/users/approve-lawyer", { lawyerId: userId }, config);
       setUsers(users.map((u) => (u._id === userId ? { ...u, status: "Active" } : u)));
     } catch (err) {
       console.error("Approve error:", err);
     }
   };
-
   const handleRejectUser = async (userId: string) => {
     try {
       const config = getAxiosConfig();
@@ -99,6 +101,22 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
       console.error("Add admin error:", err);
       alert("Failed to add admin: " + (err.response?.data?.message || "Unknown error"));
     }
+  };
+
+  const handleViewLicense = (licenseFile: string) => {
+    setSelectedLicense(`http://localhost:5000/${licenseFile}`);
+  };
+
+  const closeModal = () => {
+    setSelectedLicense(null);
+  };
+
+  const isImage = (url: string) => {
+    return /\.(png|jpg|jpeg)$/i.test(url);
+  };
+
+  const isPdf = (url: string) => {
+    return /\.pdf$/i.test(url);
   };
 
   return (
@@ -366,10 +384,8 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{user.specialization || "Not specified"}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         {user.license_file ? (
-                          <a
-                            href={`http://localhost:5000/${user.license_file}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            onClick={() => handleViewLicense(user.license_file)}
                             className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 flex items-center"
                           >
                             <svg
@@ -387,7 +403,7 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
                               />
                             </svg>
                             View License
-                          </a>
+                          </button>
                         ) : (
                           "No license"
                         )}
@@ -567,6 +583,43 @@ const UsersManagement: React.FC<UsersManagementProps> = ({
                     ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for viewing license file */}
+      {selectedLicense && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium">License File</h3>
+              <button
+                onClick={closeModal}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                <XIcon className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="flex justify-center">
+              {isImage(selectedLicense) ? (
+                <img
+                  src={selectedLicense}
+                  alt="Lawyer License"
+                  className="max-w-full max-h-[70vh] object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/placeholder.svg"; // Fallback for images
+                  }}
+                />
+              ) : isPdf(selectedLicense) ? (
+                <iframe
+                  src={selectedLicense}
+                  title="Lawyer License PDF"
+                  className="w-full h-[70vh]"
+                />
+              ) : (
+                <p className="text-red-500">Unsupported file format</p>
+              )}
             </div>
           </div>
         </div>
