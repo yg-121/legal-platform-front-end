@@ -1,42 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
-import type React from "react"
-import { useState } from "react"
-import { Eye, EyeOff, Upload } from "lucide-react"
-import axios from "axios"
+import type React from "react";
+import { useState } from "react";
+import { Eye, EyeOff, Upload, X } from "lucide-react"; // Added X icon
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Component imports with corrected paths
-import { Button } from "@/components/ui/Button.tsx"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card"
-import  Input  from "@/components/ui/Input"
-import { Label } from "@/components/ui/Label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
-import { useNavigate } from "react-router"
+import { Button } from "@/components/ui/Button.tsx";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
+import Input from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 
 // Define types for form data
 interface LoginFormData {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 interface RegisterFormData {
-  username: string
-  email: string
-  password: string
-  role: string
-  phone: string
-  specialization: string
-  location: string
-  license: File | null
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+  phone: string;
+  specialization: string;
+  location: string;
+  license: File | null;
 }
 
 interface ApiResponse {
-  success: boolean
-  message: string
-  token?: string
-  user?: any
+  success: boolean;
+  message: string;
+  token?: string;
+  user?: any;
 }
 
 const AuthPage: React.FC = () => {
@@ -44,7 +43,7 @@ const AuthPage: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginFormData>({
     email: "",
     password: "",
-  })
+  });
 
   const [registerData, setRegisterData] = useState<RegisterFormData>({
     username: "",
@@ -55,77 +54,67 @@ const AuthPage: React.FC = () => {
     specialization: "",
     location: "",
     license: null,
-  })
+  });
+
+  const [forgotEmail, setForgotEmail] = useState<string>("");
+  const [showForgotPopup, setShowForgotPopup] = useState<boolean>(false);
 
   // UI states
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [activeTab, setActiveTab] = useState<string>("login")
-  const [error, setError] = useState<string>("")
-  const [success, setSuccess] = useState<string>("")
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("login");
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+  const navigate = useNavigate();
 
-  const navigate=useNavigate()
   // Handle login form submission
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
-    setSuccess("")
-  try {
-      const response = await axios.post<ApiResponse>("http://localhost:5000/api/auth/login", loginData)
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+    try {
+      const response = await axios.post<ApiResponse>("http://localhost:5000/api/auth/login", loginData);
 
       if (response.data.token) {
-        setSuccess("Login successful!")
-        navigate("/admin")
-        // Store token in localStorage or sessionStorage
-        if (response.data.token) {
-          localStorage.setItem("token", response.data.token)
-        }
-
-        // Redirect or update UI based on successful login
-        console.log("Login successful:", response.data)
-
-        // You can redirect here if needed
-        // window.location.href = '/dashboard';
+        setSuccess("Login successful!");
+        localStorage.setItem("token", response.data.token);
+        navigate("/admin"); // Adjust to your app’s route
       } else {
-        console.log(response.data)
-        console.log(response.status)
-
-        setError(response.data.message || "Login failed. Please try again.")
+        setError(response.data.message || "Login failed. Please try again.");
       }
     } catch (err) {
-      console.error("Login error:", err)
+      console.error("Login error:", err);
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || "Login failed. Please check your credentials.")
+        setError(err.response.data.message || "Login failed. Please check your credentials.");
       } else {
-        setError("An error occurred during login. Please try again.")
+        setError("An error occurred during login. Please try again.");
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   // Handle registration form submission
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
-    setSuccess("")
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
 
     try {
-      // Create FormData for file upload
-      const formData = new FormData()
-      formData.append("username", registerData.username)
-      formData.append("email", registerData.email)
-      formData.append("password", registerData.password)
-      formData.append("role", registerData.role)
-      formData.append("phone", registerData.phone)
+      const formData = new FormData();
+      formData.append("username", registerData.username);
+      formData.append("email", registerData.email);
+      formData.append("password", registerData.password);
+      formData.append("role", registerData.role);
+      formData.append("phone", registerData.phone);
 
       if (registerData.role === "Lawyer") {
-        formData.append("specialization", registerData.specialization)
-        formData.append("location", registerData.location)
+        formData.append("specialization", registerData.specialization);
+        formData.append("location", registerData.location);
         if (registerData.license) {
-          formData.append("license_file", registerData.license)
+          formData.append("license_file", registerData.license);
         }
       }
 
@@ -133,52 +122,75 @@ const AuthPage: React.FC = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
+      });
 
       if (response.data.token) {
-        setSuccess("Registration successful! You can now log in.")
-        // Switch to login tab after successful registration
-        setTimeout(() => {
-          setActiveTab("login")
-        }, 2000)
+        setSuccess("Registration successful! You can now log in.");
+        setTimeout(() => setActiveTab("login"), 2000);
       } else {
-        setError(response.data.message || "Registration failed. Please try again.")
+        setError(response.data.message || "Registration failed. Please try again.");
       }
     } catch (err) {
-      console.error("Registration error:", err)
+      console.error("Registration error:", err);
       if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || "Registration failed. Please check your information.")
+        setError(err.response.data.message || "Registration failed. Please check your information.");
       } else {
-        setError("An error occurred during registration. Please try again.")
+        setError("An error occurred during registration. Please try again.");
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
+
+  // Handle forgot password submission
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await axios.post<ApiResponse>("http://localhost:5000/api/auth/forgot-password", {
+        email: forgotEmail,
+      });
+      setSuccess(response.data.message);
+      setForgotEmail("");
+      setShowForgotPopup(false);
+    } catch (err) {
+      console.error("Forgot password error:", err);
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data.message || "Failed to send reset link.");
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Handle login form input changes
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setLoginData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setLoginData((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Handle registration form input changes
   const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setRegisterData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setRegisterData((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Handle role selection
   const handleRoleChange = (value: string) => {
-    setRegisterData((prev) => ({ ...prev, role: value }))
-  }
+    setRegisterData((prev) => ({ ...prev, role: value }));
+  };
 
   // Handle file upload
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setRegisterData((prev) => ({ ...prev, license: e.target.files![0] }))
+      setRegisterData((prev) => ({ ...prev, license: e.target.files![0] }));
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
@@ -198,9 +210,10 @@ const AuthPage: React.FC = () => {
             defaultValue="login"
             value={activeTab}
             onValueChange={(value) => {
-              setActiveTab(value)
-              setError("")
-              setSuccess("")
+              setActiveTab(value);
+              setError("");
+              setSuccess("");
+              setShowForgotPopup(false);
             }}
             className="w-full"
           >
@@ -227,9 +240,13 @@ const AuthPage: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="login-password">Password</Label>
-                    <a href="#" className="text-sm text-blue-600 hover:underline">
+                    <button
+                      type="button"
+                      className="text-sm text-blue-600 hover:underline"
+                      onClick={() => setShowForgotPopup(true)}
+                    >
                       Forgot password?
-                    </a>
+                    </button>
                   </div>
                   <div className="relative">
                     <Input
@@ -384,6 +401,45 @@ const AuthPage: React.FC = () => {
               </form>
             </TabsContent>
           </Tabs>
+
+          {/* Custom Forgot Password Popup */}
+          {showForgotPopup && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md relative">
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                  onClick={() => setShowForgotPopup(false)}
+                >
+                  <X size={20} />
+                </button>
+                <div className="space-y-1 mb-4">
+                  <h2 className="text-2xl font-bold text-blue-800">Forgot Password</h2>
+                  <p className="text-sm text-blue-600">Enter your email to receive a reset link</p>
+                </div>
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="forgot-email">Email</Label>
+                    <Input
+                      id="forgot-email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Sending..." : "Send Reset Link"}
+                  </Button>
+                </form>
+              </div>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-sm text-center text-gray-500">
@@ -406,8 +462,7 @@ const AuthPage: React.FC = () => {
         </CardFooter>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default AuthPage
-
+export default AuthPage;
