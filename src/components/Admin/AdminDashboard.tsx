@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import io from 'socket.io-client';
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import UsersManagement from "./UsersManagement";
@@ -10,6 +11,11 @@ import CasesManagement from "./CasesManagement";
 import Notifications from "./Notifications";
 import AuditLogs from "./AuditLogs";
 import Profile from "./Profile";
+
+const socket = io('http://localhost:5000', {
+  reconnection: true,
+  reconnectionAttempts: 5,
+});
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -58,42 +64,58 @@ const AdminDashboard: React.FC = () => {
     };
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = getAxiosConfig();
-        if (!config.headers) return;
+  const fetchData = async () => {
+    try {
+      const config = getAxiosConfig();
+      if (!config.headers) return;
 
-        const usersRes = await axios.get("http://localhost:5000/api/users", config);
-        setUsers(usersRes.data.users);
+      const usersRes = await axios.get("http://localhost:5000/api/users", config);
+      setUsers(usersRes.data.users);
 
-        const casesRes = await axios.get("http://localhost:5000/api/cases", config);
-        setCases(casesRes.data.cases);
+      const casesRes = await axios.get("http://localhost:5000/api/cases", config);
+      setCases(casesRes.data.cases);
 
-        const notifRes = await axios.get("http://localhost:5000/api/notifications/admin/notifications", config);
-        setNotifications(notifRes.data.notifications);
-        setStats(notifRes.data.counts);
+      const notifRes = await axios.get("http://localhost:5000/api/notifications/admin/notifications", config);
+      setNotifications(notifRes.data.notifications); // Initial load
+      setStats(notifRes.data.counts);
 
-        const auditRes = await axios.get("http://localhost:5000/api/audit", config);
-        setAuditLogs(auditRes.data.logs);
+      const auditRes = await axios.get("http://localhost:5000/api/audit", config);
+      setAuditLogs(auditRes.data.logs);
 
-        // Fetch the latest admin profile from the server
-        const profileRes = await axios.get("http://localhost:5000/api/users/admin/profile", config);
-        setAdminProfile((prev) => ({
-          ...prev,
-          name: profileRes.data.username || "Admin",
-          email: profileRes.data.email || "",
-          phone: profileRes.data.phone || "",
-          profileImage: profileRes.data.profile_photo || "/placeholder.svg?height=200&width=200",
-        }));
-      } catch (err: any) {
-        console.error("Fetch error:", err);
-        if (err.response?.status === 401) {
-          navigate("/login");
-        }
+      const profileRes = await axios.get("http://localhost:5000/api/users/admin/profile", config);
+      setAdminProfile((prev) => ({
+        ...prev,
+        name: profileRes.data.username || "Admin",
+        email: profileRes.data.email || "",
+        phone: profileRes.data.phone || "",
+        profileImage: profileRes.data.profile_photo || "/placeholder.svg?height=200&width=200",
+      }));
+    } catch (err: any) {
+      console.error("Fetch error:", err);
+      if (err.response?.status === 401) {
+        navigate("/login");
       }
-    };
+    }
+  };
+
+  useEffect(() => {
     fetchData();
+
+    socket.on('connect', () => console.log('Socket connected:', socket.id));
+    socket.on('new_admin_notification', (notif) => {
+      console.log('New notification received:', notif);
+      setNotifications((prev) => {
+        if (prev.some((n) => n._id === notif._id)) return prev; // Prevent duplicates
+        return [notif, ...prev]; // Add new notification
+      });
+    });
+    socket.on('disconnect', () => console.log('Socket disconnected'));
+
+    return () => {
+      socket.off('connect');
+      socket.off('new_admin_notification');
+      socket.off('disconnect');
+    };
   }, [navigate]);
 
   const handleLogout = () => {
@@ -139,7 +161,12 @@ const AdminDashboard: React.FC = () => {
           )}
           {activeTab === "cases" && <CasesManagement cases={cases} />}
           {activeTab === "notifications" && (
-            <Notifications notifications={notifications} setNotifications={setNotifications} stats={stats} getAxiosConfig={getAxiosConfig} />
+            <Notifications
+              notifications={notifications}
+              setNotifications={setNotifications}
+              stats={stats}
+              getAxiosConfig={getAxiosConfig}
+            />
           )}
           {activeTab === "audit" && <AuditLogs auditLogs={auditLogs} />}
           {activeTab === "profile" && (
