@@ -1,15 +1,16 @@
-"use client"
-
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Search,Briefcase,Calendar,MessageSquare,ArrowRight,Shield,FileText,HomeIcon,Users,Building,Gavel,} from "lucide-react"
 import type { Lawyer, Article, Testimonial, LegalArea } from "../../types"
 import PageLayout from "../../components/layouts/PageLayout"
-
+import axios from "axios";
 interface ClientHomeProps {
   userName: string
+}
+
+async function getLawyer() {
+  await fetch("localhost:8000/lawyers")
 }
 
 export default function ClientHome({ userName }: ClientHomeProps) {

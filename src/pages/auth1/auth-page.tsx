@@ -1,26 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-<<<<<<< HEAD
 import type React from "react"
 import { useState } from "react"
 import { Eye, EyeOff, Upload } from "lucide-react"
 import axios from "axios"
 import { useNavigate } from "react-router"
-=======
-
-import type React from "react";
-import { useState } from "react";
-import { Eye, EyeOff, Upload, X } from "lucide-react"; // Added X icon
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
-// Component imports with corrected paths
-import { Button } from "@/components/ui/Button.tsx";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
-import Input from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
 
 // UI components
 import { Button } from "@/components/ui/Button"
@@ -50,26 +32,26 @@ import {
 
 // Types
 interface LoginFormData {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 interface RegisterFormData {
-  username: string;
-  email: string;
-  password: string;
-  role: string;
-  phone: string;
-  specialization: string;
-  location: string;
-  license: File | null;
+  username: string
+  email: string
+  password: string
+  role: string
+  phone: string
+  specialization: string
+  location: string
+  license: File | null
 }
 
 interface ApiResponse {
-  success: boolean;
-  message: string;
-  token?: string;
-  user?: any;
+  success: boolean
+  message: string
+  token?: string
+  user?: any
 }
 
 const AuthPage: React.FC = () => {
@@ -79,7 +61,7 @@ const AuthPage: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginFormData>({
     email: "",
     password: "",
-  });
+  })
 
   const [registerData, setRegisterData] = useState<RegisterFormData>({
     username: "",
@@ -90,12 +72,8 @@ const AuthPage: React.FC = () => {
     specialization: "",
     location: "",
     license: null,
-  });
+  })
 
-  const [forgotEmail, setForgotEmail] = useState<string>("");
-  const [showForgotPopup, setShowForgotPopup] = useState<boolean>(false);
-
-<<<<<<< HEAD
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("login")
@@ -152,68 +130,15 @@ const AuthPage: React.FC = () => {
       formData.append("password", registerData.password)
       formData.append("role", registerData.role)
       formData.append("phone", registerData.phone)
-=======
-  // UI states
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<string>("login");
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
-  const navigate = useNavigate();
-
-  // Handle login form submission
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    setSuccess("");
-    try {
-      const response = await axios.post<ApiResponse>("http://localhost:5000/api/auth/login", loginData);
-
-      if (response.data.token) {
-        setSuccess("Login successful!");
-        localStorage.setItem("token", response.data.token);
-        navigate("/admin"); // Adjust to your app’s route
-      } else {
-        setError(response.data.message || "Login failed. Please try again.");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || "Login failed. Please check your credentials.");
-      } else {
-        setError("An error occurred during login. Please try again.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Handle registration form submission
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const formData = new FormData();
-      formData.append("username", registerData.username);
-      formData.append("email", registerData.email);
-      formData.append("password", registerData.password);
-      formData.append("role", registerData.role);
-      formData.append("phone", registerData.phone);
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
 
       if (registerData.role === "Lawyer") {
-        formData.append("specialization", registerData.specialization);
-        formData.append("location", registerData.location);
+        formData.append("specialization", registerData.specialization)
+        formData.append("location", registerData.location)
         if (registerData.license) {
-          formData.append("license_file", registerData.license);
+          formData.append("license_file", registerData.license)
         }
       }
 
-<<<<<<< HEAD
       const response = await axios.post<ApiResponse>(
         "http://localhost:5000/api/auth/register",
         formData,
@@ -237,88 +162,30 @@ const AuthPage: React.FC = () => {
         setError(err.response.data.message || "Registration failed.")
       } else {
         setError("An error occurred during registration.")
-=======
-      const response = await axios.post<ApiResponse>("http://localhost:5000/api/auth/register", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.data.token) {
-        setSuccess("Registration successful! You can now log in.");
-        setTimeout(() => setActiveTab("login"), 2000);
-      } else {
-        setError(response.data.message || "Registration failed. Please try again.");
-      }
-    } catch (err) {
-      console.error("Registration error:", err);
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || "Registration failed. Please check your information.");
-      } else {
-        setError("An error occurred during registration. Please try again.");
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
-
-  // Handle forgot password submission
-  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const response = await axios.post<ApiResponse>("http://localhost:5000/api/auth/forgot-password", {
-        email: forgotEmail,
-      });
-      setSuccess(response.data.message);
-      setForgotEmail("");
-      setShowForgotPopup(false);
-    } catch (err) {
-      console.error("Forgot password error:", err);
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data.message || "Failed to send reset link.");
-      } else {
-        setError("An error occurred. Please try again.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }
 
   // Input change handlers
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-<<<<<<< HEAD
     setLoginData({ ...loginData, [e.target.name]: e.target.value })
   }
-=======
-    const { name, value } = e.target;
-    setLoginData((prev) => ({ ...prev, [name]: value }));
-  };
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
 
   const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-<<<<<<< HEAD
     setRegisterData({ ...registerData, [e.target.name]: e.target.value })
   }
-=======
-    const { name, value } = e.target;
-    setRegisterData((prev) => ({ ...prev, [name]: value }));
-  };
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
 
   const handleRoleChange = (value: string) => {
-    setRegisterData((prev) => ({ ...prev, role: value }));
-  };
+    setRegisterData((prev) => ({ ...prev, role: value }))
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setRegisterData((prev) => ({ ...prev, license: e.target.files![0] }));
+      setRegisterData((prev) => ({ ...prev, license: e.target.files![0] }))
     }
-  };
+  }
 
   // Component JSX
   return (
@@ -333,28 +200,10 @@ const AuthPage: React.FC = () => {
 
         <CardContent>
           {error && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>}
-<<<<<<< HEAD
           {success && <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">{success}</div>}
 
           <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setError(""); setSuccess("") }}>
             <TabsList className="grid grid-cols-2 mb-6">
-=======
-          {success && (
-            <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">{success}</div>
-          )}
-          <Tabs
-            defaultValue="login"
-            value={activeTab}
-            onValueChange={(value) => {
-              setActiveTab(value);
-              setError("");
-              setSuccess("");
-              setShowForgotPopup(false);
-            }}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-2 mb-6">
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="register">Register</TabsTrigger>
             </TabsList>
@@ -369,17 +218,7 @@ const AuthPage: React.FC = () => {
                 <div>
                   <div className="flex justify-between">
                     <Label htmlFor="login-password">Password</Label>
-<<<<<<< HEAD
                     <a href="#" className="text-sm text-blue-600 hover:underline">Forgot password?</a>
-=======
-                    <button
-                      type="button"
-                      className="text-sm text-blue-600 hover:underline"
-                      onClick={() => setShowForgotPopup(true)}
-                    >
-                      Forgot password?
-                    </button>
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
                   </div>
                   <div className="relative">
                     <Input
@@ -479,45 +318,6 @@ const AuthPage: React.FC = () => {
               </form>
             </TabsContent>
           </Tabs>
-
-          {/* Custom Forgot Password Popup */}
-          {showForgotPopup && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md relative">
-                <button
-                  type="button"
-                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                  onClick={() => setShowForgotPopup(false)}
-                >
-                  <X size={20} />
-                </button>
-                <div className="space-y-1 mb-4">
-                  <h2 className="text-2xl font-bold text-blue-800">Forgot Password</h2>
-                  <p className="text-sm text-blue-600">Enter your email to receive a reset link</p>
-                </div>
-                <form onSubmit={handleForgotPassword} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="forgot-email">Email</Label>
-                    <Input
-                      id="forgot-email"
-                      type="email"
-                      placeholder="your@email.com"
-                      value={forgotEmail}
-                      onChange={(e) => setForgotEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Sending..." : "Send Reset Link"}
-                  </Button>
-                </form>
-              </div>
-            </div>
-          )}
         </CardContent>
 
         <CardFooter className="text-sm text-center text-gray-500">
@@ -539,14 +339,7 @@ const AuthPage: React.FC = () => {
         </CardFooter>
       </Card>
     </div>
-<<<<<<< HEAD
   )
 }
 
 export default AuthPage
-=======
-  );
-};
-
-export default AuthPage;
->>>>>>> bc184b9dbe2ea7b397c66bc9e76fbf3e03d42a4e
