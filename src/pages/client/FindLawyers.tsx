@@ -330,10 +330,7 @@ export default function FindLawyers({ userName }: FindLawyersProps) {
                       <Users className="h-4 w-4 text-gray-400 mr-2" />
                       Languages: {lawyer.languages.join(", ")}
                     </div>
-                    <div className="flex items-center text-sm font-medium text-gray-900">
-                      <Shield className="h-4 w-4 text-gray-400 mr-2" />
-                      {lawyer.hourlyRate} ETB/hour
-                    </div>
+  
                   </div>
 
                   <div className="mt-6 flex space-x-3">
@@ -343,12 +340,12 @@ export default function FindLawyers({ userName }: FindLawyersProps) {
                     >
                       View Profile
                     </Link>
-                    <Link
+                    {/* <Link
                       to={`/client/appointments/book?lawyer=${lawyer.id}`}
                       className="flex-1 bg-white hover:bg-gray-50 text-blue-600 text-center font-medium py-2 px-4 rounded-md border border-blue-600 transition duration-200"
                     >
                       Book Appointment
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               </div>

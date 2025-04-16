@@ -249,25 +249,7 @@ export default function LawyerHome({ userName }: LawyerHomeProps) {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex flex-col items-center">
-              <div className="rounded-full bg-emerald-100 p-3 mb-4">
-                <DollarSign className="h-6 w-6 text-emerald-600" />
-              </div>
-              <p className="text-sm text-gray-500">Earnings</p>
-              <h3 className="text-xl font-semibold text-gray-900">{stats.totalEarnings.toLocaleString()} ETB</h3>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex flex-col items-center">
-              <div className="rounded-full bg-indigo-100 p-3 mb-4">
-                <Users className="h-6 w-6 text-indigo-600" />
-              </div>
-              <p className="text-sm text-gray-500">Clients Helped</p>
-              <h3 className="text-xl font-semibold text-gray-900">{stats.clientsHelped}</h3>
-            </div>
-          </div>
+         
         </div>
       </div>
 
@@ -278,7 +260,7 @@ export default function LawyerHome({ userName }: LawyerHomeProps) {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="text-lg font-medium text-gray-900">Available Cases in Ethiopia</h2>
+                <h2 className="text-lg font-medium text-gray-900">Available Cases</h2>
                 <Link
                   to="/lawyer/cases/available"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
@@ -325,46 +307,7 @@ export default function LawyerHome({ userName }: LawyerHomeProps) {
               </div>
             </div>
 
-            {/* Legal Updates */}
-            <div className="mt-8 bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="text-lg font-medium text-gray-900">Ethiopian Legal Updates</h2>
-                <Link
-                  to="/lawyer/resources"
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
-                >
-                  View All <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-
-              <div className="divide-y divide-gray-200">
-                {legalUpdates.map((article) => (
-                  <div key={article.id} className="p-6 hover:bg-gray-50">
-                    <div className="sm:flex sm:items-start sm:justify-between">
-                      <div className="sm:flex-1">
-                        <h3 className="text-lg font-medium text-gray-900">{article.title}</h3>
-                        <div className="mt-1 flex items-center text-sm text-gray-500">
-                          <BookOpen className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                          {article.category} • {article.readTime}
-                        </div>
-                        <p className="mt-2 text-sm text-gray-600 line-clamp-2">{article.excerpt}</p>
-                        <div className="mt-2 text-xs text-gray-500">
-                          {formatSimpleDate(article.date)} • {article.author}
-                        </div>
-                      </div>
-                      <div className="mt-4 sm:mt-0 sm:ml-6">
-                        <Link
-                          to={`/lawyer/resources/${article.id}`}
-                          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                          Read More
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+           
           </div>
 
           {/* Sidebar */}
@@ -438,12 +381,7 @@ export default function LawyerHome({ userName }: LawyerHomeProps) {
                   <p className="text-sm text-gray-600 mb-2">
                     Stay current with Ethiopian legal requirements and earn continuing education credits.
                   </p>
-                  <Link
-                    to="/lawyer/professional-development"
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                  >
-                    View Opportunities
-                  </Link>
+               
                 </div>
 
                 <div>
@@ -479,27 +417,27 @@ export default function LawyerHome({ userName }: LawyerHomeProps) {
                   </Link>
 
                   <Link
-                    to="/lawyer/cases"
+                    to="/lawyer/case/detail"
                     className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
                   >
                     <Briefcase className="h-6 w-6 text-blue-600 mb-2" />
-                    <span className="text-sm text-gray-900">My Cases</span>
+                    <span className="text-sm text-gray-900">Cases</span>
                   </Link>
 
                   <Link
-                    to="/lawyer/appointments"
+                    to="/lawyer/cases/available"
                     className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
                   >
-                    <Calendar className="h-6 w-6 text-blue-600 mb-2" />
-                    <span className="text-sm text-gray-900">Calendar</span>
+                    <FileText className="h-6 w-6 text-blue-600 mb-2" />
+                    <span className="text-sm text-gray-900">Cases On Hand</span>
                   </Link>
 
                   <Link
-                    to="/lawyer/earnings"
+                    to="/lawyer/bids"
                     className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
                   >
                     <DollarSign className="h-6 w-6 text-blue-600 mb-2" />
-                    <span className="text-sm text-gray-900">Earnings</span>
+                    <span className="text-sm text-gray-900">Bids</span>
                   </Link>
                 </div>
               </div>

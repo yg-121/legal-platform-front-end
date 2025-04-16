@@ -27,7 +27,7 @@ export default function Footer() {
               </a>
             </div>
           </div>
-
+{/* 
           <div>
             <h3 className="text-lg font-semibold mb-4">For Clients</h3>
             <ul className="space-y-2">
@@ -52,9 +52,9 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold mb-4">For Lawyers</h3>
             <ul className="space-y-2">
               <li>
@@ -78,7 +78,7 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
@@ -92,14 +92,14 @@ export default function Footer() {
                 +251 11 123 4567
               </li>
             </ul>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <Link
                 to="/contact"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
               >
                 Contact Support
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -109,13 +109,13 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} LegalConnect Ethiopia. All rights reserved.
             </p>
             <div className="mt-4 md:mt-0 flex space-x-6">
-              <Link to="/terms" className="text-gray-300 hover:text-white text-sm">
+              <Link to="#" className="text-gray-300 hover:text-white text-sm">
                 Terms of Service
               </Link>
-              <Link to="/privacy" className="text-gray-300 hover:text-white text-sm">
+              <Link to="#" className="text-gray-300 hover:text-white text-sm">
                 Privacy Policy
               </Link>
-              <Link to="/faq" className="text-gray-300 hover:text-white text-sm">
+              <Link to="#" className="text-gray-300 hover:text-white text-sm">
                 FAQ
               </Link>
             </div>

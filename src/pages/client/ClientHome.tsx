@@ -4,19 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import {
-  Search,
-  Briefcase,
-  Calendar,
-  MessageSquare,
-  ArrowRight,
-  Shield,
-  FileText,
-  HomeIcon,
-  Users,
-  Building,
-  Gavel,
-} from "lucide-react"
+import { Search,Briefcase,Calendar,MessageSquare,ArrowRight,Shield,FileText,HomeIcon,Users,Building,Gavel,} from "lucide-react"
 import type { Lawyer, Article, Testimonial, LegalArea } from "../../types"
 import PageLayout from "../../components/layouts/PageLayout"
 
@@ -126,7 +114,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
           content:
             "I found an excellent business lawyer through this platform. The process was smooth and the legal advice I received was invaluable for my company.",
           imageUrl: "/placeholder.svg?height=60&width=60",
-          rating: 5,
+      
         },
         {
           id: 2,
@@ -135,7 +123,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
           content:
             "The family lawyer I connected with helped me navigate a complex divorce case with professionalism and empathy. Highly recommended!",
           imageUrl: "/placeholder.svg?height=60&width=60",
-          rating: 4,
+       
         },
         {
           id: 3,
@@ -144,7 +132,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
           content:
             "Finding a lawyer specialized in intellectual property was crucial for my tech startup. This platform made it easy to find the right expert.",
           imageUrl: "/placeholder.svg?height=60&width=60",
-          rating: 5,
+        
         },
       ]
 
@@ -237,7 +225,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold mb-6">Find the Right Lawyer in Ethiopia</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6">Find the Right Lawyer </h1>
             <p className="text-lg md:text-xl mb-8">
               Connect with experienced lawyers for your legal needs. Get professional advice and representation.
             </p>
@@ -311,7 +299,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">Top Rated Lawyers in Ethiopia</h2>
+              <h2 className="text-3xl font-bold text-gray-900">Top Rated Lawyers</h2>
               <p className="mt-4 text-lg text-gray-600">
                 Experienced professionals ready to help with your legal matters
               </p>
@@ -363,10 +351,6 @@ export default function ClientHome({ userName }: ClientHomeProps) {
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Experience:</span>
                         <span className="text-gray-900 font-medium">{lawyer.experience} years</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Rate:</span>
-                        <span className="text-gray-900 font-medium">{lawyer.hourlyRate} ETB/hour</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Languages:</span>
@@ -447,7 +431,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
               <h2 className="text-3xl font-bold text-gray-900">Legal Resources</h2>
               <p className="mt-4 text-lg text-gray-600">Helpful articles and guides on Ethiopian law</p>
             </div>
-            <Link to="/resources" className="hidden md:flex items-center text-blue-600 hover:text-blue-800 font-medium">
+            <Link to="#" className="hidden md:flex items-center text-blue-600 hover:text-blue-800 font-medium">
               View All Resources <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </div>
@@ -515,22 +499,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial) => (
               <div key={testimonial.id} className="bg-white rounded-lg shadow-md p-6 text-gray-900">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`h-5 w-5 ${i < testimonial.rating ? "text-yellow-400" : "text-gray-300"}`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 15.585l-7.07 3.715 1.35-7.865L.36 7.13l7.91-1.15L10 0l1.73 5.98 7.91 1.15-5.92 5.305 1.35 7.865z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  ))}
-                </div>
+            
                 <p className="text-gray-600 mb-6 italic">"{testimonial.content}"</p>
                 <div className="flex items-center">
                   <img

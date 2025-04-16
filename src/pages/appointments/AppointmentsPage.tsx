@@ -281,7 +281,6 @@ export default function AppointmentsPage({ userName, userRole }: AppointmentsPag
         <div className="px-4 py-5 sm:px-6 border-b border-gray-200 flex justify-between items-center">
           <div>
             <h1 className="text-lg font-medium text-gray-900">Appointments</h1>
-            <p className="mt-1 text-sm text-gray-500">Manage your scheduled meetings</p>
           </div>
           <div className="flex space-x-3">
             <div className="flex border border-gray-300 rounded-md overflow-hidden">

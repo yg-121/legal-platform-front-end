@@ -296,7 +296,7 @@ export default function MessagesPage({ userName, userRole }: MessagesPageProps) 
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl md:text-3xl font-bold">Messages</h1>
-          <p className="mt-2 text-blue-100">Communicate with your {userRole === "client" ? "lawyers" : "clients"}</p>
+          
         </div>
       </div>
 

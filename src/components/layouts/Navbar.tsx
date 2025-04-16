@@ -34,12 +34,12 @@ export default function Navbar({ userRole, userName, unreadNotifications = 0 }: 
     { name: "My Cases", icon: Briefcase, href: "/client/cases" },
     { name: "Post a Case", icon: FileText, href: "/client/cases/post" },
     { name: "Appointments", icon: Calendar, href: "/client/appointments" },
-    { name: "Messages", icon: MessageSquare, href: "/client/messages" },
+    { name: "Messages", icon: MessageSquare, href: "/common/messages" },
   ]
 
   const lawyerNavItems = [
     { name: "Home", icon: Home, href: "/lawyer/home" },
-    { name: "My Cases", icon: Briefcase, href: "/lawyer/cases" },
+    { name: "Cases", icon: Briefcase, href: "/lawyer/case/detail" },
     { name: "Available Cases", icon: FileText, href: "/lawyer/cases/available" },
     { name: "My Bids", icon: DollarSign, href: "/lawyer/bids" },
     { name: "Appointments", icon: Calendar, href: "/lawyer/appointments" },
@@ -167,7 +167,7 @@ export default function Navbar({ userRole, userName, unreadNotifications = 0 }: 
                     Settings
                   </Link>
                   <Link
-                    to="/logout"
+                    to="/login"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                     onClick={() => setProfileDropdownOpen(false)}

@@ -11,7 +11,7 @@ import AvailableCases from "./pages/lawyer/AvailableCases"
 import CaseDetail from "./pages/lawyer/CaseDetail"
 import NotificationsPage from "./pages/common/NotificationsPage"
 import AppointmentsPage from "./pages/appointments/AppointmentsPage"
-import FindLawyers from "./components/Client/FindLawyers";
+import FindLawyers from "./pages/client/FindLawyers";
 import MyCases from "./pages/client/MyCases";
 import MyBids from "./pages/lawyer/MyBids";
 import MessagesPage from "./pages/common/MessagesPage";
@@ -71,6 +71,17 @@ const App = () => {
           path="/client/cases"
           element={user.role === "client" ? <MyCases userName={user.name} /> : <Navigate to="/" replace />}
         />
+<Route
+          path="/common/messages"
+          element={
+            user.role === "client" ? (
+              <MessagesPage userName={user.name} userRole="client" />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+
 
 <Route
   path="/lawyer/home"
@@ -92,6 +103,10 @@ const App = () => {
 />
 <Route
   path="/lawyer/cases/available/:id"
+  element={user.role === "lawyer" ? <CaseDetail userName={user.name} /> : <Navigate to="/" replace />}
+/>
+<Route
+  path="/lawyer/case/detail"
   element={user.role === "lawyer" ? <CaseDetail userName={user.name} /> : <Navigate to="/" replace />}
 />
 <Route
@@ -121,7 +136,7 @@ const App = () => {
         />
 
 <Route
-          path="/common/messages/:conversationId"
+          path="/common/messages"
           element={
             user.role === "lawyer" ? (
               <MessagesPage userName={user.name} userRole="lawyer" />
