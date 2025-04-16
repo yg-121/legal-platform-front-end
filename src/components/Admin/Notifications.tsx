@@ -15,10 +15,19 @@ const Notifications: React.FC<NotificationsProps> = ({ notifications, setNotific
     try {
       const config = getAxiosConfig();
       if (!config.headers) return;
-      await axios.patch(`http://localhost:5000/api/notifications/${notificationId}/read`, {}, config);
-      setNotifications(notifications.map((n) => (n._id === notificationId ? { ...n, status: "Read" } : n)));
-    } catch (err) {
-      console.error("Mark as read error:", err);
+
+      console.log(`Attempting to mark notification ${notificationId} as read`);
+      const response = await axios.patch(
+        `http://localhost:5000/api/notifications/notifications/${notificationId}/read`, // Updated URL
+        {},
+        config
+      );
+      console.log("Mark as read response:", response.data);
+      setNotifications(notifications.map((n) =>
+        n._id === notificationId ? { ...n, status: "Read" } : n
+      ));
+    } catch (err: any) {
+      console.error("Mark as read error:", err.response?.data || err.message);
     }
   };
 
@@ -61,7 +70,10 @@ const Notifications: React.FC<NotificationsProps> = ({ notifications, setNotific
                 <p className="text-sm">{notification.message}</p>
                 {notification.status === "Unread" && (
                   <button
-                    onClick={() => handleMarkAsRead(notification._id)}
+                    onClick={() => {
+                      console.log("Notification ID to mark:", notification._id); // Debug
+                      handleMarkAsRead(notification._id);
+                    }}
                     className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 text-xs"
                   >
                     Mark as read

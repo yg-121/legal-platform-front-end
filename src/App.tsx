@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AuthPage from "./pages/auth1/auth-page";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import ResetPassword from "./pages/auth1/ResetPassword";
 // import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import { useState } from "react"
 import ClientHome from "./pages/client/ClientHome"
@@ -15,6 +16,7 @@ import FindLawyers from "./pages/client/FindLawyers";
 import MyCases from "./pages/client/MyCases";
 import MyBids from "./pages/lawyer/MyBids";
 import MessagesPage from "./pages/common/MessagesPage";
+
 
 const App = () => {
   const [user] = useState({
@@ -152,6 +154,7 @@ const App = () => {
 
       <Route path="/login" element={<AuthPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );
 };
