@@ -39,8 +39,8 @@ export default function Navbar({ userRole, userName, unreadNotifications = 0 }: 
 
   const lawyerNavItems = [
     { name: "Home", icon: Home, href: "/lawyer/home" },
-    { name: "Cases", icon: Briefcase, href: "/lawyer/case/detail" },
-    { name: "Available Cases", icon: FileText, href: "/lawyer/cases/available" },
+    { name: "Cases", icon: Briefcase, href: "/lawyer/cases/available" },
+    { name: "Cases On Hand", icon: FileText, href: "/lawyer/lawyerCase" },
     { name: "My Bids", icon: DollarSign, href: "/lawyer/bids" },
     { name: "Appointments", icon: Calendar, href: "/lawyer/appointments" },
     { name: "Messages", icon: MessageSquare, href: "/common/messages" },
@@ -55,10 +55,13 @@ export default function Navbar({ userRole, userName, unreadNotifications = 0 }: 
           {/* Logo and Mobile menu button */}
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center">
-                <span className="text-xl font-bold text-blue-600">LegalConnect</span>
-                <span className="ml-1 text-sm text-blue-500">Ethiopia</span>
-              </Link>
+             
+                <img
+                  src="/Logo.png"
+                  alt="LegalConnect Ethiopia Logo"
+                  className="h-30 w-40 mt-4 "
+                />
+             
             </div>
           </div>
 
@@ -221,4 +224,3 @@ export default function Navbar({ userRole, userName, unreadNotifications = 0 }: 
     </nav>
   )
 }
-

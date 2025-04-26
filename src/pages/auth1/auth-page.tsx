@@ -2,7 +2,7 @@ import type React from "react"
 import { useState } from "react"
 import { Eye, EyeOff, Upload } from "lucide-react"
 import axios from "axios"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 
 // UI components
 import { Button } from "@/components/ui/Button"
@@ -191,8 +191,17 @@ const AuthPage: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
       <Card className="w-full max-w-md shadow-xl">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-blue-800">Legal Platform</CardTitle>
+        <CardHeader className="space-y-0">
+          {/* <CardTitle className="text-2xl font-bold text-center text-blue-800">Legal Platform</CardTitle> */}
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+                <img
+                  src="/Logo.png"
+                  alt="LegalConnect Ethiopia Logo"
+                  className="h-30 w-40 ml-29 mt-0"
+                />
+            </div>
+          </div>
           <CardDescription className="text-center text-blue-600">
             {activeTab === "login" ? "Sign in to your account" : "Create a new account"}
           </CardDescription>

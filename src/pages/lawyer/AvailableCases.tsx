@@ -1,7 +1,4 @@
-"use client"
-
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Search, Filter, Clock, DollarSign, Calendar, FileText, User } from "lucide-react"
@@ -200,7 +197,7 @@ export default function AvailableCases({ userName }: AvailableCasesProps) {
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between">
                   <div className="flex-1">
                     <div className="flex items-start">
-                      <h2 className="text-lg font-semibold text-gray-900">{caseItem.title}</h2>
+                      {/* <h2 className="text-lg font-semibold text-gray-900">{caseItem.title}</h2> */}
                       <span className="ml-2 px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                         {caseItem.category}
                       </span>
@@ -208,10 +205,10 @@ export default function AvailableCases({ userName }: AvailableCasesProps) {
 
                     <div className="mt-2 flex items-center text-sm text-gray-500">
                       <User className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                      Client: {caseItem.client}
+                      Client: <strong>{caseItem.client}</strong>
                     </div>
 
-                    <p className="mt-2 text-sm text-gray-600 line-clamp-2">{caseItem.description}</p>
+                    <strong><p className="mt-2 text-sm text-gray-600 line-clamp-2">{caseItem.description}</p></strong>
 
                     <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="flex items-center text-sm text-gray-500">

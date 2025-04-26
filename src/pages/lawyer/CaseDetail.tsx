@@ -1,7 +1,4 @@
-"use client"
-
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { Calendar, Clock, DollarSign, FileText, User, Download, Send } from "lucide-react"
@@ -32,7 +29,7 @@ export default function CaseDetail({ userName }: CaseDetailProps) {
         client: "ABC Corp",
         postedDate: "2025-03-16",
         deadline: "2025-04-15",
-        budget: "$3,000-$5,000",
+        budget: "$3,000",
         budgetMin: 3000,
         budgetMax: 5000,
         category: "Corporate Law",
@@ -89,16 +86,16 @@ export default function CaseDetail({ userName }: CaseDetailProps) {
 
   return (
     <PageLayout userRole="lawyer" userName={userName}>
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div className="max-w-4xl mx-auto p-6 mb-6">
+        <div className="bg-gray rounded-lg shadow-2xl p-6 mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{caseData.title}</h1>
+              {/* <h1 className="text-2xl font-bold text-gray-900">{caseData.title}</h1> */}
               <div className="mt-2 flex items-center">
                 <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                   {caseData.category}
                 </span>
-                <span className="ml-2 text-sm text-gray-500">Case #{caseData.id}</span>
+                {/* <span className="ml-2 text-sm text-gray-500">Case #{caseData.id}</span> */}
               </div>
             </div>
             <button
@@ -111,50 +108,37 @@ export default function CaseDetail({ userName }: CaseDetailProps) {
 
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Case Details</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-3">Case Details</h2>
               <div className="space-y-4">
                 <div className="flex items-center text-sm text-gray-500">
                   <User className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <span>Client: {caseData.client}</span>
+                  <span>Client: <strong>{caseData.client}</strong></span>
                 </div>
                 <div className="flex items-center text-sm text-gray-500">
                   <Clock className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <span>Posted: {formatDate(caseData.postedDate)}</span>
+                  <span>Posted:<strong> {formatDate(caseData.postedDate)}</strong></span>
                 </div>
                 <div className="flex items-center text-sm text-gray-500">
                   <Calendar className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <span>Deadline: {formatDate(caseData.deadline)}</span>
+                  <span>Deadline: <strong>{formatDate(caseData.deadline)}</strong></span>
                 </div>
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="font-semibold flex items-center text-sm text-gray-500">
                   <DollarSign className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <span>Budget: {caseData.budget}</span>
+                  <span>Amount: <strong>{caseData.budget}</strong></span>
                 </div>
               </div>
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Client Information</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-3">Description </h2>
               <div className="space-y-4">
-                <div className="flex items-center text-sm text-gray-500">
-                  <User className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <span>Name: {caseData.clientInfo.name}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <User className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <span>Contact: {caseData.clientInfo.contactPerson}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Clock className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                  <span>Member Since: {formatDate(caseData.clientInfo.memberSince)}</span>
-                </div>
+              <p className="text-gray-700">{caseData.description}</p>
+              
               </div>
             </div>
           </div>
 
-          <div className="mt-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Description</h2>
-            <p className="text-gray-700">{caseData.description}</p>
-          </div>
+        
 
           <div className="mt-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-3">Attachments</h2>
@@ -188,7 +172,7 @@ export default function CaseDetail({ userName }: CaseDetailProps) {
                 <div className="space-y-6">
                   <div>
                     <label htmlFor="bidAmount" className="block text-sm font-medium text-gray-700">
-                      Bid Amount (USD)
+                      Bid Amount 
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -229,8 +213,8 @@ export default function CaseDetail({ userName }: CaseDetailProps) {
                     </select>
                   </div>
 
-                  <div>
-                    <label htmlFor="bidMessage" className="block text-sm font-medium text-gray-700">
+                  <div >
+                    <label htmlFor="bidMessage" className="block text-sm font-medium text-gray-700 font-bold">
                       Message to Client
                     </label>
                     <textarea

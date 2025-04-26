@@ -9,6 +9,7 @@ import LawyerHome from "./pages/lawyer/LawyerHome"
 import ProfilePage from "./pages/common/ProfilePage"
 import PostCase from "./pages/client/PostCase"
 import AvailableCases from "./pages/lawyer/AvailableCases"
+import LawyerCase from "./pages/lawyer/lawyerCase"
 import CaseDetail from "./pages/lawyer/CaseDetail"
 import NotificationsPage from "./pages/common/NotificationsPage"
 import AppointmentsPage from "./pages/appointments/AppointmentsPage"
@@ -111,6 +112,12 @@ const App = () => {
   path="/lawyer/case/detail"
   element={user.role === "lawyer" ? <CaseDetail userName={user.name} /> : <Navigate to="/" replace />}
 />
+
+<Route
+  path="/lawyer/lawyerCase"
+  element={user.role === "lawyer" ? <LawyerCase userName={user.name} /> : <Navigate to="/" replace />}
+/>
+
 <Route
   path="/lawyer/notifications"
   element={

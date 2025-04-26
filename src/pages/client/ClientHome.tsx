@@ -2,16 +2,17 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Search,Briefcase,Calendar,MessageSquare,ArrowRight,Shield,FileText,HomeIcon,Users,Building,Gavel,} from "lucide-react"
-import type { Lawyer, Article, Testimonial, LegalArea } from "../../types"
+import type { Lawyer} from "../../types/lawyer"
+import type { Article, Testimonial,LegalArea } from "../../types"
+import { getLawyer } from "@/services/lawyerService"
 import PageLayout from "../../components/layouts/PageLayout"
-import axios from "axios";
+
+
+
 interface ClientHomeProps {
   userName: string
 }
 
-async function getLawyer() {
-  await fetch("localhost:8000/lawyers")
-}
 
 export default function ClientHome({ userName }: ClientHomeProps) {
   const [topLawyers, setTopLawyers] = useState<Lawyer[]>([])
@@ -23,55 +24,28 @@ export default function ClientHome({ userName }: ClientHomeProps) {
   const [selectedCategory, setSelectedCategory] = useState("")
 
   useEffect(() => {
-    // In a real application, you would fetch this data from your API
-    // For demo purposes, we'll use mock data
+
+   async function fetchLawyer(){
+    try {
+      
+       const mockLawyers=await getLawyer()
+
+      //  console.log(mockLawyers)
+       setTopLawyers(mockLawyers)
+
+
+    } catch (error) {
+      console.log(error)
+      
+    }
+    
+  }
+
+  fetchLawyer();
+
+
+
     setTimeout(() => {
-      const mockLawyers: Lawyer[] = [
-        {
-          id: 1,
-          name: "Abebe Kebede",
-          specialization: "Business Law",
-          rating: 4.8,
-          location: "Addis Ababa",
-          hourlyRate: 1500,
-          imageUrl: "/placeholder.svg?height=100&width=100",
-          experience: 12,
-          languages: ["Amharic", "English"],
-        },
-        {
-          id: 2,
-          name: "Tigist Haile",
-          specialization: "Family Law",
-          rating: 4.7,
-          location: "Addis Ababa",
-          hourlyRate: 1200,
-          imageUrl: "/placeholder.svg?height=100&width=100",
-          experience: 8,
-          languages: ["Amharic", "English", "Tigrinya"],
-        },
-        {
-          id: 3,
-          name: "Solomon Tesfaye",
-          specialization: "Criminal Law",
-          rating: 4.9,
-          location: "Bahir Dar",
-          hourlyRate: 1400,
-          imageUrl: "/placeholder.svg?height=100&width=100",
-          experience: 15,
-          languages: ["Amharic", "English"],
-        },
-        {
-          id: 4,
-          name: "Meron Alemu",
-          specialization: "Intellectual Property",
-          rating: 4.6,
-          location: "Addis Ababa",
-          hourlyRate: 1600,
-          imageUrl: "/placeholder.svg?height=100&width=100",
-          experience: 10,
-          languages: ["Amharic", "English", "French"],
-        },
-      ]
 
       const mockArticles: Article[] = [
         {
@@ -176,7 +150,6 @@ export default function ClientHome({ userName }: ClientHomeProps) {
         },
       ]
 
-      setTopLawyers(mockLawyers)
       setArticles(mockArticles)
       setTestimonials(mockTestimonials)
       setLegalAreas(mockLegalAreas)
@@ -280,7 +253,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {legalAreas.map((area) => (
+            {/* {legalAreas.map((area) => (
               <Link
                 key={area.id}
                 to={`/client/lawyers?category=${encodeURIComponent(area.name)}`}
@@ -290,7 +263,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{area.name}</h3>
                 <p className="text-gray-600">{area.description}</p>
               </Link>
-            ))}
+            ))} */}
           </div>
         </div>
       </div>
@@ -315,22 +288,22 @@ export default function ClientHome({ userName }: ClientHomeProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {topLawyers.map((lawyer) => (
-              <div key={lawyer.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div key={lawyer._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div className="p-6">
                   <div className="flex flex-col items-center">
-                    <img
+                    {/* <img
                       src={lawyer.imageUrl || "/placeholder.svg"}
-                      alt={lawyer.name}
+                      alt={lawyer.username}
                       className="h-24 w-24 rounded-full object-cover mb-4"
-                    />
-                    <h3 className="text-xl font-semibold text-gray-900 text-center">{lawyer.name}</h3>
+                    /> */}
+                    <h3 className="text-xl font-semibold text-gray-900 text-center">{lawyer.username}</h3>
                     <p className="text-blue-600 mb-2">{lawyer.specialization}</p>
 
                     <div className="flex items-center mb-4">
                       {[...Array(5)].map((_, i) => (
                         <svg
                           key={i}
-                          className={`h-5 w-5 ${i < Math.floor(lawyer.rating) ? "text-yellow-400" : "text-gray-300"}`}
+                          className={`h-5 w-5 ${i < Math.floor(lawyer.averageRating) ? "text-yellow-400" : "text-gray-300"}`}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -341,7 +314,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
                           />
                         </svg>
                       ))}
-                      <span className="ml-2 text-gray-600 text-sm">{lawyer.rating}</span>
+                      <span className="ml-2 text-gray-600 text-sm">{lawyer.averageRating}</span>
                     </div>
 
                     <div className="w-full space-y-2 mb-4">
@@ -351,16 +324,16 @@ export default function ClientHome({ userName }: ClientHomeProps) {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Experience:</span>
-                        <span className="text-gray-900 font-medium">{lawyer.experience} years</span>
+                        <span className="text-gray-900 font-medium">{lawyer.specialization} years</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Languages:</span>
-                        <span className="text-gray-900 font-medium">{lawyer.languages.join(", ")}</span>
+                        <span className="text-gray-900 font-medium">{lawyer.specialization.join(", ")}</span>
                       </div>
                     </div>
 
                     <Link
-                      to={`/client/lawyers/${lawyer.id}`}
+                      to={`/client/lawyers/${lawyer._id}`}
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-medium py-2 px-4 rounded-md transition duration-200"
                     >
                       View Profile
@@ -498,7 +471,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial) => (
+            {/* {testimonials.map((testimonial) => (
               <div key={testimonial.id} className="bg-white rounded-lg shadow-md p-6 text-gray-900">
             
                 <p className="text-gray-600 mb-6 italic">"{testimonial.content}"</p>
@@ -514,7 +487,7 @@ export default function ClientHome({ userName }: ClientHomeProps) {
                   </div>
                 </div>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
       </div>
